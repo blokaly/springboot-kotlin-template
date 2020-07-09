@@ -1,0 +1,9 @@
+spring:
+  profiles:
+    active: local
+  main:
+    banner-mode: "off"
+  data:
+    mongodb:
+      uri: mongodb://localhost:27017
+      database: template
