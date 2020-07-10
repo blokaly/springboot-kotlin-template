@@ -6,4 +6,11 @@ spring:
   data:
     mongodb:
       uri: mongodb://localhost:27017
-      database: template
+      database: springbootkotlin
+
+---
+spring:
+  profiles: production
+  data:
+    mongodb:
+      uri: mongodb://${MDB_USERNAME}:${MDB_PASSWORD}@172.17.0.1:27017

@@ -18,7 +18,7 @@ class UserMessageController(private val userMessageService: UserMessageService) 
     private val logger by LoggerDelegate()
 
     @PostMapping
-    fun create(@Valid @RequestBody request: UserMessageDto.Request): ResponseEntity<UserMessageDto.Response> {
+    fun saveMessage(@Valid @RequestBody request: UserMessageDto.Request): ResponseEntity<UserMessageDto.Response> {
         return try {
             val message = userMessageService.saveUserMessage(request.userName, request.text)
             ResponseEntity(message.toResponse(), HttpStatus.OK)
@@ -30,7 +30,7 @@ class UserMessageController(private val userMessageService: UserMessageService) 
     }
 
     @GetMapping(Endpoints.USER_MESSAGE_ID)
-    fun queryTemplateById(@NotBlank @PathVariable messageId: String): ResponseEntity<UserMessageDto.Response> {
+    fun queryMessageById(@NotBlank @PathVariable messageId: String): ResponseEntity<UserMessageDto.Response> {
         val message = userMessageService.findMessageById(messageId)
         return if (message != null) {
             ResponseEntity(message.toResponse(), HttpStatus.OK)

@@ -1,0 +1,32 @@
+version: '3.5'
+
+services:
+  springbootkotlin-mongo:
+    image: mongo
+    container_name: springbootkotlin-mongo
+    command: --bind_ip_all
+    ports:
+      - "27017:27017"
+    volumes:
+      - ./db-init/:/docker-entrypoint-initdb.d
+      - springbootkotlin-mongo:/data/db
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=${MDB_DEFAULT_ROOT_USERNAME}
+      - MONGO_INITDB_ROOT_PASSWORD=${MDB_DEFAULT_ROOT_PASSWORD}
+    restart: unless-stopped
+
+  springbootkotlin:
+    image: ${IMAGE_TAG}:${IMAGE_VERSION}
+    container_name: springbootkotlin
+    environment:
+      - PROFILE_NAME=production
+      - MDB_USERNAME=${MDB_DEFAULT_USERNAME}
+      - MDB_PASSWORD=${MDB_DEFAULT_PASSWORD}
+    network_mode: "host"
+    restart: unless-stopped
+    depends_on:
+      - "springbootkotlin-mongo"
+
+volumes:
+  springbootkotlin-mongo:
+    name: springbootkotlin_mongo

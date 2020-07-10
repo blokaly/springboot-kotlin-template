@@ -1,5 +1,4 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
-import java.nio.file.Paths
 
 plugins {
 	java
@@ -82,11 +81,11 @@ tasks.register<Copy>("copy") {
 jib {
 	from { image = "openjdk:8-jdk-alpine" }
 	to {
-		image = "services.vcbox/vcbox"
+		image = "github.blokaly/springbootkotlin"
 		tags = setOf("$version")
 		container {
 			jvmFlags = listOf("-Dspring.profiles.active=\${PROFILE_NAME}", "-Xmx1024m")
-			mainClass = "services.vcbox.weidentity.WeidentityApplicationKt"
+			mainClass = "github.blokaly.springbootkotin.ApplicationMainKt"
 		}
 	}
 	container.creationTime = "USE_CURRENT_TIMESTAMP"

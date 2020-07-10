@@ -19,7 +19,7 @@
         <appender-ref ref="STDOUT"/>
     </appender>
 
-    <springProfile name="local">
+    <springProfile name="local, production">
         <root level="INFO">
             <appender-ref ref="AsyncStdout"/>
         </root>
