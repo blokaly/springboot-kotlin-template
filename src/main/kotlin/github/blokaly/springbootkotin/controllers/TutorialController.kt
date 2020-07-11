@@ -49,7 +49,7 @@ class TutorialController(private val tutorialCrud: TutorialCrud) {
     fun updateTutorial(@PathVariable("id") id: String, @RequestBody tutorial: Tutorial): ResponseEntity<Tutorial?> {
         val data = tutorialCrud.findById(id).toNullable()
         return if (data != null) {
-            val updated = tutorialCrud.update(data)
+            val updated = tutorialCrud.update(data, tutorial)
             ResponseEntity(updated, HttpStatus.OK)
         } else {
             ResponseEntity(HttpStatus.NOT_FOUND)
