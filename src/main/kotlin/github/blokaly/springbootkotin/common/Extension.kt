@@ -1,8 +1,5 @@
 package github.blokaly.springbootkotin.common
 
-import github.blokaly.springbootkotin.models.UserMessage
-import github.blokaly.springbootkotin.models.UserMessageDto
+import java.util.*
 
-fun UserMessage.toResponse() = UserMessageDto.Response(
-    id = id, userName = userName, text = text
-)
+fun <T : Any> Optional<T>.toNullable(): T? = orElse(null)
