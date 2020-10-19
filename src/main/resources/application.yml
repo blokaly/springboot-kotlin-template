@@ -8,6 +8,16 @@ spring:
       uri: mongodb://localhost:27017
       database: springbootkotlin
 
+cloud:
+  aws:
+    credentials:
+      accessKey: <accessKey>
+      secretKey: <secretKey>
+    region: us-east-1
+    endpoint: sqs.ap-us-1.amazonaws.com
+    messageGroup: default
+    messageQueue: <queue name>
+
 ---
 spring:
   profiles: production

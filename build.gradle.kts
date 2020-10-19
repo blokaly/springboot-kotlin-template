@@ -8,6 +8,7 @@ plugins {
 	id("io.spring.dependency-management") version "1.0.9.RELEASE"
 	id("com.google.cloud.tools.jib") version "2.4.0"
 	kotlin("jvm") version kotlinVersion
+	kotlin("kapt") version kotlinVersion
 	kotlin("plugin.spring") version kotlinVersion
 	kotlin("plugin.allopen") version kotlinVersion
 	kotlin("plugin.noarg") version kotlinVersion
@@ -52,10 +53,16 @@ dependencies {
 	implementation("org.springframework.boot:spring-boot-starter-undertow")
 	implementation("org.springframework.boot:spring-boot-starter-validation")
 	implementation("org.springframework.boot:spring-boot-starter-data-mongodb")
+	kapt("org.springframework.boot:spring-boot-configuration-processor")
 
 	implementation("org.slf4j:slf4j-api:1.7.25")
 	implementation("ch.qos.logback:logback-classic:1.2.3")
 	implementation("ch.qos.logback:logback-core:1.2.3")
+
+	// aws sqs
+	implementation("org.springframework:spring-jms")
+	implementation("com.amazonaws:aws-java-sdk:1.11.882")
+	implementation("com.amazonaws:amazon-sqs-java-messaging-lib:1.0.8")
 
 	testImplementation("org.springframework.boot:spring-boot-starter-test") {
 		exclude(group = "org.junit.vintage", module = "junit-vintage-engine")

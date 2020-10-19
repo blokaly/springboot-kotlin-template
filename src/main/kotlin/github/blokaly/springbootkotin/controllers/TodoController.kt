@@ -3,6 +3,8 @@ package github.blokaly.springbootkotin.controllers
 import github.blokaly.springbootkotin.common.Endpoints
 import github.blokaly.springbootkotin.common.LoggerDelegate
 import github.blokaly.springbootkotin.common.toNullable
+import github.blokaly.springbootkotin.message.AwsSqsProducer
+import github.blokaly.springbootkotin.models.ToDoMessage
 import github.blokaly.springbootkotin.models.Todo
 import github.blokaly.springbootkotin.models.TodoCrud
 import org.springframework.http.HttpStatus
@@ -12,7 +14,7 @@ import org.springframework.web.bind.annotation.*
 
 @RestController
 @RequestMapping(Endpoints.TODO_ENDPOINT, produces = [MediaType.APPLICATION_JSON_VALUE])
-class TodoController(private val todoCrud: TodoCrud) {
+class TodoController(private val todoCrud: TodoCrud, private val awsSqsProducer: AwsSqsProducer) {
 
     private val logger by LoggerDelegate()
 
@@ -42,9 +44,10 @@ class TodoController(private val todoCrud: TodoCrud) {
     }
 
     @PostMapping
-    fun createTodo(@RequestBody todo: Todo): ResponseEntity<Todo?> {
+    fun createTodo(@RequestBody todo: ToDoMessage): ResponseEntity<Todo?> {
         return try {
             logger.info("createTodo, todo:$todo")
+            awsSqsProducer.send(todo)
             val data = todoCrud.save(Todo(title = todo.title, description = todo.description, completed = false))
             ResponseEntity(data, HttpStatus.CREATED)
         } catch (ex: Exception) {
