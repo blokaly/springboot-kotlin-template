@@ -18,7 +18,6 @@ fun main(args: Array<String>) {
 @SpringBootApplication
 @EnableMongoRepositories
 @EnableMongoAuditing
-@EnableScheduling
 class ApplicationMain {
     @PreDestroy
     @Throws(Exception::class)

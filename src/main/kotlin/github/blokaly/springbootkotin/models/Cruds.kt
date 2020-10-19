@@ -4,9 +4,9 @@ import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.stereotype.Component
 
 @Component
-class TutorialCrud(@Qualifier("TutorialDao") private val dao: TutorialDao) : TutorialDao by dao {
-    fun update(tutorial: Tutorial, update: Tutorial): Tutorial {
-        val updated = tutorial.copy(title = update.title, description = update.description, published = update.published)
+class TodoCrud(@Qualifier("TodoDao") private val dao: TodoDao) : TodoDao by dao {
+    fun update(todo: Todo, update: Todo): Todo {
+        val updated = todo.copy(title = update.title, description = update.description, completed = update.completed)
         return save(updated)
     }
 }
