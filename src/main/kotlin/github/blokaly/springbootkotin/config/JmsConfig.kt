@@ -17,6 +17,7 @@ import org.springframework.jms.support.converter.MappingJackson2MessageConverter
 import org.springframework.jms.support.converter.MessageConverter
 import org.springframework.jms.support.converter.MessageType
 import org.springframework.jms.support.destination.DynamicDestinationResolver
+import javax.jms.ConnectionFactory
 import javax.jms.Session
 
 
@@ -24,17 +25,16 @@ import javax.jms.Session
 @EnableJms
 class JmsConfig(private val awsSqsProperties: AwsSqsProperties) {
 
-    private lateinit var connectionFactory: SQSConnectionFactory
-
-    init {
+    @Bean
+    fun jmsConnectionFactory(): ConnectionFactory {
         val sqsClientBuilder: AmazonSQSClientBuilder = AmazonSQSClientBuilder.standard()
                 .withCredentials(AWSStaticCredentialsProvider(BasicAWSCredentials(awsSqsProperties.credentials.accessKey, awsSqsProperties.credentials.secretKey)))
                 .withEndpointConfiguration(AwsClientBuilder.EndpointConfiguration(awsSqsProperties.endpoint, awsSqsProperties.region))
-        connectionFactory = SQSConnectionFactory(ProviderConfiguration(), sqsClientBuilder)
+        return SQSConnectionFactory(ProviderConfiguration(), sqsClientBuilder)
     }
 
     @Bean
-    fun jmsTemplate(): JmsTemplate {
+    fun jmsTemplate(connectionFactory:ConnectionFactory): JmsTemplate {
         val jmsTemplate = JmsTemplate(connectionFactory)
         jmsTemplate.messageConverter = messageConverter()
         return jmsTemplate
@@ -52,9 +52,8 @@ class JmsConfig(private val awsSqsProperties: AwsSqsProperties) {
     }
 
     @Bean
-    fun jmsListenerContainerFactory(): DefaultJmsListenerContainerFactory? {
+    fun jmsListenerContainerFactory(connectionFactory:ConnectionFactory): DefaultJmsListenerContainerFactory? {
         val factory = DefaultJmsListenerContainerFactory()
-
         factory.setConnectionFactory(connectionFactory)
         factory.setDestinationResolver(DynamicDestinationResolver())
         factory.setConcurrency("3-10")
